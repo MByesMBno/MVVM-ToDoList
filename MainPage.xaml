@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToDo.MainPage"
+             xmlns:y="clr-namespace:ToDo"
+             x:DataType="y:MainViewModel"
+             xmlns:z="clr-namespace:ToDo.ToDoTasks"
+             BackgroundColor="#2A2A2A">
+    
+    <StackLayout Margin="20">
+        <Label Text="ToDo" FontSize="Title" TextColor="White" HorizontalOptions="Center" Margin="0,0,0,20"/>
+        <StackLayout Margin="20">
+        <Grid Margin="30,20,20,30">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                  <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Entry x:Name="TaskEntry" Placeholder="Enter new task" Text="{Binding taskText}" Grid.Row="0" Grid.ColumnSpan="4" TextColor="White" FontSize="Title"/>
+            <Button Text="+" Command="{Binding AddCommand}" CommandParameter="{Binding Source={x:Reference TaskEntry}, Path=Text}" Grid.Row="0" Grid.Column="4"/>
+        </Grid>
+    </StackLayout>
+   
+    <ListView ItemsSource="{Binding Tasks}" SelectedItem="{Binding SelectedTask}" x:DataType="y:MainViewModel">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="z:ToDoTasks">
+                        <ViewCell>
+
+                    <StackLayout Margin="20">
+                            <Grid Margin="30,20,20,30">
+                                <Grid.ColumnDefinitions >
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Label  Margin="10"  Text="{Binding TaskText}" TextColor="Aqua" FontSize="Title" x:Name="Label" Grid.Row="0" Grid.ColumnSpan="3">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference check},Path=IsChecked}"  Value="true">
+                                            <Setter Property="TextDecorations" Value="Strikethrough"></Setter>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Button Text="Delete" BackgroundColor="Red" Command="{Binding DelCommand,Source={RelativeSource AncestorType={x:Type y:MainViewModel}}}" CommandParameter="{Binding}" Grid.Row="0" Grid.Column="4"/>
+                                <CheckBox x:Name="check" IsChecked="{Binding IsCompletedTask, Source={RelativeSource AncestorType={x:Type z:ToDoTasks}}}" Grid.Row="0" Grid.Column="3" HorizontalOptions="Center"/>
+                            </Grid>
+                    </StackLayout>
+                    </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+    </StackLayout>
+
+
+</ContentPage>
